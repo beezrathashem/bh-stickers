@@ -1,239 +1,105 @@
-# RNWhatsAppStickers
+# react-native-whatsapp-stickers-url
 
-## Original Repo https://github.com/Jobeso/react-native-whatsapp-stickers 
-## This repo is supposed to have the same implementation but just from a url instead of locally. This repo will prob be a pr into the original repo one day when i have more time, although i don't think using local assets makes any sense since you need to go thru the app store each time for any new sticker. Also this repo will work on the latest m1 chip macs which the origional repo doesn't.
+Add WhatsApp sticker packs to an Expo / React Native app **from remote image URLs**.
+No stickers are bundled in the binary, so packs can be added or changed without an
+app-store release.
 
-## Getting started
+Built on the [Expo Modules API](https://docs.expo.dev/modules/overview/) (Swift + Kotlin),
+works with Expo SDK 50+ / React Native 0.73+, the New Architecture and `expo prebuild`.
+Implements WhatsApp's current third-party sticker contract for
+[iOS](https://github.com/WhatsApp/stickers/tree/main/iOS) and
+[Android](https://github.com/WhatsApp/stickers/tree/main/Android), including animated packs.
 
-`$ npm install react-native-whatsapp-stickers --save`
+## What it does
 
-or
+1. Downloads the tray icon and every sticker image.
+2. Validates and normalises them to WhatsApp's requirements
+   (512x512 WebP, <=100KB static / <=500KB animated, 96x96 PNG tray <=50KB, 3-30 stickers, 1-3 emojis).
+   PNG or oversized static stickers are converted on-device; animated stickers must already be compliant WebP.
+3. Hands the pack to WhatsApp
+   - iOS: pasteboard payload + `whatsapp://stickerPack`.
+   - Android: persists the pack, exposes it through the required `ContentProvider`, fires
+     `com.whatsapp.intent.action.ENABLE_STICKER_PACK` and reports WhatsApp's answer.
 
-`$ yarn add react-native-whatsapp-stickers`
+## Install
 
-## Integration
-
-For React Native versions < 0.60 use version 1.+ of this library and checkout the corresponding README file.
-
-Please make sure you follow the requirements for sticker packs from WhatsApp. You can find them [here for iOS](https://github.com/WhatsApp/stickers/tree/master/iOS#sticker-art-and-app-requirements) and [here for Android](https://github.com/WhatsApp/stickers/tree/master/Android#sticker-art-and-app-requirements).
-
-### iOS
-
-#### Swift
-
-1. Under `Build Settings` section `Build Options` set `Always Embed Swift Started Libraries` to `true`
-2. Make sure you have the following under `library search paths`
-
-```
-$(inherited)
-$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)
-```
-
-#### Info.plist
-- Add the following to your `Info.plist`
-```
-<key>LSApplicationQueriesSchemes</key>
-  <array>
-  <string>whatsapp</string>
-</array>
+```sh
+# published from git; pin a commit or tag
+pnpm add github:beezrathashem/bh-stickers#main
 ```
 
-#### Your Sticker Images
-1. make sure they follow the guidelines from WhatsApp
-2. Put the images somewhere in your project directory
-3. drag and drop them into your XCode Project (recommended to a new folder)
-4. check `Copy Items If Needed` in the dialogue that pops up and click `Finish`
+Add the config plugin to `app.json` / `app.config.ts`:
 
-**Done 🎉**
-
-### Android
-
-1. Create a `contents.json` file in `yourproject -> android -> app -> src -> main -> assets` following the following scheme.
-**Improtant! Including dots in the identifier is causing troubles.**
-```json
-{
-  "android_play_store_link": "https://play.google.com/store/apps/details?id=com.myapp",
-  "ios_app_store_link": "https://itunes.apple.com/app/myapp/id123456",
-  "sticker_packs": [
-    {
-      "identifier": "myprojectstickers",
-      "name": "MyProject Stickers",
-      "publisher": "John Doe",
-      "tray_image_file": "tray_icon.png",
-      "publisher_email": "contact@myproject.com",
-      "publisher_website": "https://myproject.com",
-      "privacy_policy_website": "https://myproject.com/legal",
-      "license_agreement_website": "https://myproject.com/license",
-      "stickers": [
-        {
-          "image_file": "01_sticker.webp",
-          "emojis": ["✌️"]
-        },
-        {
-          "image_file": "02_sticker.webp",
-          "emojis": ["😍","😻"]
-        },
-        {
-          "image_file": "03_sticker.webp",
-          "emojis": ["😎"]
-        }
-      ]
-    }
-  ]
-}
+```js
+plugins: ["react-native-whatsapp-stickers-url"]
 ```
 
-2. Place the WebP images in a folder with **with the same name** that you defined as `identifier` in the object above under the same directory. So your `assets` folder has the following structure:
-
-```
-assets
-+-- contents.json
-+-- identifier
-|   +-- 01_sticker.webp
-|   +-- 02_sticker.webp
-|   +-- 03_sticker.webp
-```
-
-3. Add `noCompress` to your app `build.gradle` in `yourproject -> android -> app`
-```gradle
-android {
-    ...
-    aaptOptions {
-        noCompress "webp"
-    }
-    ...
-```
-
-**Done 🎉**
+Then run `npx expo prebuild` and rebuild the native app (EAS or locally). The plugin adds
+`whatsapp` to `LSApplicationQueriesSchemes` on iOS; the Android manifest (content provider,
+`<queries>`) is merged automatically from the library.
 
 ## Usage
 
-### Methods
+```ts
+import WhatsAppStickers from "react-native-whatsapp-stickers-url";
 
-Check if WhatsApp is available
-```javascript
-RNWhatsAppStickers.isWhatsAppAvailable()
-  .then(isWhatsAppAvailable => console.log('available:', isWhatsAppAvailable))
-  .catch(e => console.log(e))
-```
-
-#### iOS
-
-1. Create a sticker pack
-```javascript
-import RNWhatsAppStickers from "react-native-whatsapp-stickers"
-
-const config = {
-  identifier: '',
-  name: '',
-  publisher: '',
-  trayImageFileName: '',
-  publisherEmail: '',
-  publisherWebsite: '',
-  privacyPolicyWebsite: '',
-  licenseAgreementWebsite: '',
-}
-
-RNWhatsAppStickers.createStickerPack(config)
-  .then(() => console.log('success'))
-  .catch(e => console.log(e))
-```
-
-2. Add sticker
-```javascript
-RNWhatsAppStickers.addSticker('stickername.png', ['😎'])
-  .then(() => console.log('success'))
-  .catch(e => console.log(e))
-```
-
-3. Send to WhatsApp
-```javascript
-RNWhatsAppStickers.send()
-  .then(() => console.log('success'))
-  .catch(e => console.log(e))
-```
-
-#### Android
-You are already good to go with the sticker pack creation if you followed the `Integration` part.
-
-1. Send to WhatsApp where `name` and `identifier` represent the values you defined in `contents.json`
-```javascript
-RNWhatsAppStickers.send('identifier', 'name')
-  .then(() => console.log('success'))
-  .catch(e => console.log(e))
-```
-
-### Example
-
-#### App.js
-```javascript
-import { Platform } from "react-native";
-import RNWhatsAppStickers from "react-native-whatsapp-stickers"
-import { stickerConfig } from "./stickerConfig"
-
-const { stickers, ...packConfig } = stickerConfig
-
-RNWhatsAppStickers.isWhatsAppAvailable()
-  .then(isWhatsAppAvailable => {
-    if (isWhatsAppAvailable) {
-      if (Platform.OS === 'ios') {
-        return RNWhatsAppStickers.createStickerPack(packConfig)
-          .then(() => {
-            const promises = stickers.map(item =>
-              RNWhatsAppStickers.addSticker(item.fileName, item.emojis)
-            )
-            Promise.all(promises).then(() => RNWhatsAppStickers.send())
-          })
-          .catch(e => console.log(e))
-      }
-
-      return RNWhatsAppStickers.send('myprojectstickers', 'MyProject Stickers')
-    }
-
-    return undefined
-  })
-  .catch(e => console.log(e))
-```
-
-#### stickerConfig.js
-```javascript
-export const stickerConfig = {
-  identifier: 'myprojectstickers',
-  name: 'MyProject Stickers',
-  publisher: 'John Doe',
-  trayImageFileName: 'tray_icon.png',
-  publisherEmail: 'contact@myproject.com',
-  publisherWebsite: 'https://myproject.com',
-  privacyPolicyWebsite: 'https://myproject.com/legal',
-  licenseAgreementWebsite: 'https://myproject.com/license',
-  stickers: [
-    {
-      fileName: '01_sticker.png',
-      emojis: ['✌️'],
-    },
-    {
-      fileName: '02_sticker.png',
-      emojis: ['😍', '😻'],
-    },
-    {
-      fileName: '03_sticker.png',
-      emojis: ['😎']
-    }
-  ]
+if (await WhatsAppStickers.isWhatsAppAvailable()) {
+  const result = await WhatsAppStickers.addStickerPack({
+    identifier: "bh_torah_1",
+    name: "BeEzrat HaShem Torah",
+    publisher: "BeEzrat HaShem",
+    trayImageUrl: "https://cdn.example.org/stickers/bh_torah_1/tray.png",
+    publisherWebsite: "https://beezrathashem.org",
+    privacyPolicyWebsite: "https://beezrathashem.org/privacy",
+    licenseAgreementWebsite: "https://beezrathashem.org/terms",
+    iosAppStoreLink: "https://apps.apple.com/app/id1234567890",
+    androidPlayStoreLink: "https://play.google.com/store/apps/details?id=com.beezrathashem",
+    stickers: [
+      { imageUrl: "https://cdn.example.org/stickers/bh_torah_1/01.webp", emojis: ["🙏"] },
+      { imageUrl: "https://cdn.example.org/stickers/bh_torah_1/02.webp", emojis: ["📖", "✡️"] },
+      { imageUrl: "https://cdn.example.org/stickers/bh_torah_1/03.webp", emojis: ["🕯️"] },
+    ],
+  });
+  // result.status: "added" (Android confirmed) | "sent" (iOS, no confirmation possible) | "cancelled"
 }
 ```
 
-## Troubleshooting
-<details>
-  <summary>ld: warning: Could not find auto-linked library 'swiftFoundation'</summary>
-  
-  - Create an empty swift file in your project
+Errors are rejected with readable messages, e.g. `sticker #4: animated stickers must be exactly 512x512, got 500x500`.
 
-  `xCode -> Click File -> new File -> empty.swift`
+### API
 
-  **Important** Click yes when it asks for creating bridge-headers
-</details>
+| Function | Notes |
+| --- | --- |
+| `isNativeModuleAvailable()` | `false` in binaries that don't link this module (safe for shared code). |
+| `isWhatsAppAvailable()` | WhatsApp or WhatsApp Business installed. |
+| `addStickerPack(pack)` | Download, validate, send. See `StickerPackInput` in `src/index.ts`. |
+| `isStickerPackAdded(id)` | Android: asks WhatsApp. iOS: resolves `null` (no API). |
+| `removeStickerPack(id)` | Android: deletes the cached files. iOS: no-op. |
 
-## Roadmap
-- Native implementation of method to check if WhatsApp is installed
-- Consistend react-native api
+### Updating a published pack
+
+WhatsApp on Android caches sticker images. When you change the images of an existing
+`identifier`, bump `imageDataVersion` (e.g. `"1"` -> `"2"`) so WhatsApp re-fetches them.
+
+## Validate packs from your computer
+
+```sh
+node scripts/validate-pack.mjs https://your-cdn/whatsapp-stickers/packs.json
+node scripts/validate-pack.mjs ./example-pack.json
+```
+
+Downloads every image and reports anything WhatsApp would reject. `example-pack.json`
+shows the JSON shape used by the validator and by the BeEzrat HaShem app.
+
+## Sticker art checklist (from WhatsApp)
+
+- Stickers: exactly 512x512 px, transparent background, WebP (PNG is converted for static packs).
+- Static <=100KB; animated <=500KB, WebP only, first frame = full image, 8ms min per frame, <=10s total.
+- A pack is either all static or all animated.
+- Tray icon: 96x96 px PNG/WebP, static, <=50KB.
+- 3-30 stickers per pack, 1-3 emojis per sticker, up to 10 packs per app.
+- WhatsApp recommends an 8px white (#FFFFFF) stroke around each sticker.
+
+## License
+
+BSD-3-Clause. Portions derived from WhatsApp's sample code (BSD).

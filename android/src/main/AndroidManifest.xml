@@ -1,13 +1,26 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.INTERNET" />
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-package="com.jobeso.RNWhatsAppStickers">
-<application>
+  <!-- Package visibility (Android 11+): lets the app see WhatsApp / WhatsApp Business and their sticker intent. -->
+  <queries>
+    <package android:name="com.whatsapp" />
+    <package android:name="com.whatsapp.w4b" />
+    <intent>
+      <action android:name="com.whatsapp.intent.action.ENABLE_STICKER_PACK" />
+    </intent>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:scheme="whatsapp" />
+    </intent>
+  </queries>
+
+  <application>
+    <!-- WhatsApp reads packs through this provider. The authority MUST be "<applicationId>.stickercontentprovider". -->
     <provider
-        android:name=".StickerContentProvider"
-        android:authorities="${applicationId}.stickercontentprovider"
-        android:enabled="true"
-        android:exported="true"
-        android:readPermission="com.whatsapp.sticker.READ" />
-
-</application>
+      android:name="expo.modules.whatsappstickers.StickerContentProvider"
+      android:authorities="${applicationId}.stickercontentprovider"
+      android:enabled="true"
+      android:exported="true"
+      android:readPermission="com.whatsapp.sticker.READ" />
+  </application>
 </manifest>

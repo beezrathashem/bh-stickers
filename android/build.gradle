@@ -1,36 +1,15 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.1'  // Specify a specific version
-    }
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
 }
 
-apply plugin: 'com.android.library'
+group = 'org.beezrathashem'
+version = '3.0.0'
 
 android {
-    compileSdkVersion 34
-    buildToolsVersion "34.0.0"
-
-    defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 34
-        versionCode 1
-        versionName "1.0"
-    }
-    lintOptions {
-        abortOnError false
-    }
-}
-
-repositories {
-    mavenCentral()
-    google()
-}
-
-dependencies {
-    implementation 'com.facebook.react:react-native:+'
+  namespace "expo.modules.whatsappstickers"
+  defaultConfig {
+    versionCode 1
+    versionName "3.0.0"
+  }
 }

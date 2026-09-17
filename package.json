@@ -1,37 +1,48 @@
 {
-  "name": "react-native-whatsapp-stickers",
-  "version": "2.0.3",
-  "description": "create sticker packs for whatsapp with your react-native app",
-  "main": "index.js",
+  "name": "react-native-whatsapp-stickers-url",
+  "version": "3.0.0",
+  "description": "Add WhatsApp sticker packs built from remote image URLs in an Expo / React Native app (Expo Modules API, iOS + Android)",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "files": [
+    "src",
+    "ios",
+    "android",
+    "plugin",
+    "scripts",
+    "app.plugin.js",
+    "expo-module.config.json",
+    "example-pack.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "validate-pack": "node scripts/validate-pack.mjs"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jobeso/react-native-whatsapp-stickers"
+    "url": "https://github.com/beezrathashem/bh-stickers"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "homepage": "https://github.com/beezrathashem/bh-stickers",
   "keywords": [
     "react-native",
+    "expo",
+    "expo-module",
     "whatsapp",
     "sticker",
     "stickers",
-    "stickerpack",
-    "pack"
+    "stickerpack"
   ],
-  "author": "Johannes Sorg <johannes@sorg.me>",
-  "license": "BSD",
+  "author": "BeEzrat HaShem <info@beezrathashem.org>",
+  "license": "BSD-3-Clause",
   "peerDependencies": {
-    "react-native": ">=0.60.0"
+    "expo": "*",
+    "react-native": "*"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.9.0",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-config-prettier": "^3.3.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-prettier": "^3.0.0",
-    "eslint-plugin-react": "^7.11.1",
-    "prettier": "^1.15.2"
+    "@types/react": "~19.1.0",
+    "expo-modules-core": "^3.0.0",
+    "typescript": "~5.9.2"
   }
 }

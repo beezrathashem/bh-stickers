@@ -1,0 +1,23 @@
+{
+  "packs": [
+    {
+      "identifier": "bh_torah_1",
+      "name": "BeEzrat HaShem Torah",
+      "publisher": "BeEzrat HaShem",
+      "trayImageUrl": "https://example.org/stickers/bh_torah_1/tray.png",
+      "publisherEmail": "info@beezrathashem.org",
+      "publisherWebsite": "https://beezrathashem.org",
+      "privacyPolicyWebsite": "https://beezrathashem.org/privacy",
+      "licenseAgreementWebsite": "https://beezrathashem.org/terms",
+      "iosAppStoreLink": "https://apps.apple.com/app/id1234567890",
+      "androidPlayStoreLink": "https://play.google.com/store/apps/details?id=com.beezrathashem",
+      "animated": false,
+      "imageDataVersion": "1",
+      "stickers": [
+        { "imageUrl": "https://example.org/stickers/bh_torah_1/01.webp", "emojis": ["🙏"], "accessibilityText": "Baruch HaShem" },
+        { "imageUrl": "https://example.org/stickers/bh_torah_1/02.webp", "emojis": ["📖", "✡️"] },
+        { "imageUrl": "https://example.org/stickers/bh_torah_1/03.webp", "emojis": ["🕯️"] }
+      ]
+    }
+  ]
+}

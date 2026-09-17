@@ -15,7 +15,6 @@
     },
     "ios": {
       "bundleIdentifier": "org.BeEzratHashem.Stickers",
-      "buildNumber": "1",
       "supportsTablet": false,
       "config": {
         "usesNonExemptEncryption": false
@@ -23,7 +22,6 @@
     },
     "android": {
       "package": "com.beezrathashem.stickers",
-      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#F2F8FF"

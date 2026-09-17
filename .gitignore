@@ -1,4 +1,16 @@
-node_modules
-build
+node_modules/
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+# generated native projects (EAS runs prebuild on the server)
+/ios/
+/android/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
 .DS_Store
 *.log

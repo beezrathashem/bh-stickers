@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "BH Stickers",
+    "slug": "bh-stickers",
+    "scheme": "bhstickers",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "newArchEnabled": true,
+    "backgroundColor": "#F2F8FF",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F2F8FF"
+    },
+    "ios": {
+      "bundleIdentifier": "org.BeEzratHashem.Stickers",
+      "buildNumber": "1",
+      "supportsTablet": false,
+      "config": {
+        "usesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.beezrathashem.stickers",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F2F8FF"
+      }
+    },
+    "plugins": [
+      "./modules/whatsapp-stickers/app.plugin.js"
+    ],
+    "extra": {
+      "packsUrl": "https://www.bhtorah.org/beezrathashem/whatsapp-stickers/packs.json",
+      "links": {
+        "website": "https://www.beezrathashem.org",
+        "getApp": "https://www.beezrathashem.org/getapp",
+        "contactEmail": "info@beezrathashem.org"
+      },
+      "eas": {
+        "projectId": "f16f760f-e9ca-43d8-bbbf-fc0c6c6b7590"
+      }
+    },
+    "owner": "beezrat-hashem"
+  }
+}

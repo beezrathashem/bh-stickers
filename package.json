@@ -1,48 +1,41 @@
 {
-  "name": "react-native-whatsapp-stickers-url",
-  "version": "3.0.0",
-  "description": "Add WhatsApp sticker packs built from remote image URLs in an Expo / React Native app (Expo Modules API, iOS + Android)",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
-  "files": [
-    "src",
-    "ios",
-    "android",
-    "plugin",
-    "scripts",
-    "app.plugin.js",
-    "expo-module.config.json",
-    "example-pack.json",
-    "README.md",
-    "LICENSE"
-  ],
+  "name": "bh-stickers",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BH Stickers: WhatsApp sticker packs from BeEzrat HaShem",
+  "main": "index.ts",
   "scripts": {
+    "start": "expo start",
+    "ios": "expo run:ios",
+    "android": "expo run:android",
+    "prebuild": "expo prebuild --no-install",
     "typecheck": "tsc --noEmit",
-    "validate-pack": "node scripts/validate-pack.mjs"
+    "validate-pack": "node scripts/validate-pack.mjs",
+    "build:preview": "eas build --platform all --profile preview",
+    "build:production": "eas build --platform all --profile production",
+    "submit:ios": "eas submit --platform ios --latest",
+    "submit:android": "eas submit --platform android --latest"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^15.0.3",
+    "expo": "~54.0.20",
+    "expo-constants": "~18.0.10",
+    "expo-image": "~3.0.10",
+    "expo-linking": "~8.0.8",
+    "expo-splash-screen": "~31.0.10",
+    "expo-status-bar": "~3.0.8",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-safe-area-context": "~5.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@types/react": "~19.1.0",
+    "typescript": "~5.9.2"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/beezrathashem/bh-stickers"
   },
-  "homepage": "https://github.com/beezrathashem/bh-stickers",
-  "keywords": [
-    "react-native",
-    "expo",
-    "expo-module",
-    "whatsapp",
-    "sticker",
-    "stickers",
-    "stickerpack"
-  ],
-  "author": "BeEzrat HaShem <info@beezrathashem.org>",
-  "license": "BSD-3-Clause",
-  "peerDependencies": {
-    "expo": "*",
-    "react-native": "*"
-  },
-  "devDependencies": {
-    "@types/react": "~19.1.0",
-    "expo-modules-core": "^3.0.0",
-    "typescript": "~5.9.2"
-  }
+  "license": "BSD-3-Clause"
 }

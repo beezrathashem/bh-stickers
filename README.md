@@ -25,6 +25,13 @@ The app reads `https://www.bhtorah.org/beezrathashem/whatsapp-stickers/packs.jso
 node scripts/validate-pack.mjs https://www.bhtorah.org/beezrathashem/whatsapp-stickers/packs.json
 ```
 
+Have a folder of artwork? One command converts it (512x512 WebP, 96x96 tray, packs of 30) and writes `packs.json`:
+
+```sh
+node scripts/build-packs.mjs ~/path/to/sticker-folders ./out
+# then copy ./out/* into kiruv.co/apps/nextjs/public/beezrathashem/whatsapp-stickers/ and deploy
+```
+
 Format: see `modules/whatsapp-stickers/example-pack.json`. Rules and field docs:
 `modules/whatsapp-stickers/README.md`.
 

@@ -14,7 +14,7 @@
       "backgroundColor": "#F2F8FF"
     },
     "ios": {
-      "bundleIdentifier": "org.BeEzratHashem.Stickers",
+      "bundleIdentifier": "org.BeEzratHashem.bh-stickers",
       "supportsTablet": false,
       "config": {
         "usesNonExemptEncryption": false
